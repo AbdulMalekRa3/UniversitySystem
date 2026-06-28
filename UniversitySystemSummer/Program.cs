@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoWrapper;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using UniversitySystemSummer.Core.Modules;
 using UniversitySystemSummer.Data;
 using UniversitySystemSummer.Data.Modules;
@@ -23,6 +24,13 @@ builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 

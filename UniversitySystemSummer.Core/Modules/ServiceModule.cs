@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using UniversitySystemSummer.Core.Services;
 
 namespace UniversitySystemSummer.Core.Modules
 {
