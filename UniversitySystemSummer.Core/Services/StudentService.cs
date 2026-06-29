@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,30 +25,17 @@ namespace UniversitySystemSummer.Core.Services
 
         public StudentDto? GetById(int id)
         {
-            _logger.LogInformation("Attempting to retrieve student with ID: {Id}", id);
-
-            try
+            var student = _repository.GetById(id);
+            if (student == null) throw new NotFoundException("Student not found");
+            return new StudentDto()
             {
-                var student = _repository.GetById(id);
-                if (student == null)
-                {
-                    _logger.LogWarning("Student with ID: {Id} not found", id);
-                    return null;
-                }
-
-                _logger.LogInformation("Successfully retrieved student with ID: {Id}, Name: {Name}", id, student.Name);
-                return new StudentDto
-                {
-                    Id = student.Id,
-                    Name = student.Name
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while retrieving student with ID: {Id}", id);
-                throw;
-            }
+                Id = student.Id,
+             
+                 Name = student.Name,
+            };
         }
+            
+        
 
         public List<StudentDto> GetAll()
         {
@@ -141,24 +128,18 @@ namespace UniversitySystemSummer.Core.Services
         {
             _logger.LogInformation("Attempting to delete student with ID: {Id}", id);
 
-            try
-            {
-                // Optional: Check if student exists before deletion
+            
                 var student = _repository.GetById(id);
                 if (student == null)
                 {
                     _logger.LogWarning("Student with ID: {Id} not found for deletion", id);
-                    return;
+                    throw new NotFoundException($"Student with ID {id} not found");  
                 }
 
                 _repository.Delete(id);
                 _logger.LogInformation("Successfully deleted student with ID: {Id}, Name: {Name}", id, student.Name);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while deleting student with ID: {Id}", id);
-                throw;
-            }
+            
+           
         }
     }
 
