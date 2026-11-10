@@ -1,4 +1,4 @@
-﻿using AutoWrapper.Wrappers;
+using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversitySystemSummer.Api.Filters;
@@ -29,7 +29,7 @@ namespace UniversitySystemSummer.Controllers
         public ApiResponse GetById(int id)
         {
             var student = _service.GetById(id);
-            return new ApiResponse();
+            return new ApiResponse(student);
         }
 
         [HttpGet]
